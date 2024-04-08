@@ -1,19 +1,19 @@
-import styles from "./page.module.css";
-import Server from "../app/server/page"
+//import styles from "./page.module.css";
+import Server from "../app/server/page";
+import InputModal from "../app/Client/Inputmodal";
+
+
 
 export default function Home() {
   return (
-    <main className={styles.main}>
+    <main >
         <p>Your current plant inventory is listet down below. To add more plants to your inventory please fill out the form under your current plant inventory.</p>
-        <div className={styles.card}>
- 
-        <Server />
+        <div>        </div>
 
-        </div>
-
+        <InputModal/>
         <a
           href="/otherList"
-          className={styles.card}
+          
           target="_blank"
           rel="noopener noreferrer"
         > otherLists Page</a>
