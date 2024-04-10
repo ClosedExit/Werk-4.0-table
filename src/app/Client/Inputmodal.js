@@ -1,106 +1,49 @@
 "use client"
 import React from "react";
-import {ref} from "react";
-import {Input, Button, Form, DatePicker, Table} from "antd";
-
-var arr=[]
-let keycount = 4;
-export default function tableForm (){
-
-//console.log(event);
-//arr.push(event);
-//console.log(arr);
-const data = [
-    {
-        plantname: "aplantname",
-        sunlight: "sunlight",
-        watering: "watering",
-        price: "price",
-        purchaseDate: "purchaseDate",
-        key: "1"
-    },
-    {
-        plantname: "bplantname2",
-        sunlight: "sunlight2",
-        watering: "watering2",
-        price: "price2",
-        purchaseDate: "purchaseDate2",
-        key: "2"
-    },
-    {
-        plantname: "plantname3",
-        sunlight: "sunlight3",
-        watering: "watering3",
-        price: "price3",
-        purchaseDate: "purchaseDate3",
-        key: "3"
-    }
-]
-
-const columns = [
-    {
-        title: "Name",
-        dataIndex: "plantname",
-        key: "key",
-    },
-    {
-        title: "Sunlight",
-        dataIndex: "sunlight",
-        key: "key"
-    },
-    {
-        title: "Watering",
-        dataIndex: "watering",
-        key: "key"
-    },
-    {
-        title: "Price",
-        dataIndex: "price",
-        key: "key"
-    },
-    {
-        title: "PurchaseDate",
-        dataIndex: "purchaseDate",
-        key: "key"
-    }
-]
-const x = data;
-const y = columns;
+import { useState } from "react";
+import {Input, Button, Form, DatePicker, Table, Modal} from "antd";
+import {data, columns} from "../server/plants";
 
 
-const addItem=(event)=>{
-   
-    const newObj = {
-        plantname: event.plantname,
-        sunlight: event.sunlight,
-        watering: event.watering,
-        price: event.price,
-        purchaseDate: event.purchaseDate,
-        key: keycount
-    }
+export default function tableForm (){       
 
-keycount++;
-console.log("new keycount is: "+keycount);
+// renders preexisting list-entries
+const [dummyData, addItem] = useState(data);//dummyData is the new array with data as initialstate and addItem a function for updating
 
-data.push(newObj);
-console.log("Data array new looks like this: " + data[data.length-1].plantname)
-}
-    return (
-<main>
-<Table 
-        dataSource={data} 
+// rerenders old list-entries and adds a new list-entrie, but without changing the original data
+// triggert on onFinish/submit
+const addPlant = (formValues)=>{            //formValues is the {values}-object handed with the onFinish-event
+    const newPlant =                        //this {values}-object needs to be modified with a key before it can be added 
+    {
+        ...formValues,                      //existings key-values 
+        purchaseDate: purchaseDate.value,   //.value had to be added, because the purchaseDate wasn't rendering
+        key: (dummyData.length+1).toString()};   //add a unique key to each plant-object
+
+    addItem((exPlants) => {                 //to also render the existing entries
+    return[...exPlants, newPlant]           //return the array with existing entries + newPlant
+    })
+    form.resetFields();                     // reset formfields
+};
+const[form] = Form.useForm();               //defines the used form as a form to be able to use the resetFields function
+
+//renders table and form
+return (
+<>
+    <Table 
+        dataSource={dummyData} 
         columns={columns} 
         pagination
-        >
-            
-</Table>
+        >      
+    </Table>
+
         <Form 
-            onFinish={addItem}
+            form={form}
+            onFinish={addPlant}
             labelCol={{
-                span: 10,
+                span: 4,
               }}
               wrapperCol={{
-                span: 12,
+                span: 18,
               }}
               style={{
                 maxWidth: 600,
@@ -114,27 +57,20 @@ console.log("Data array new looks like this: " + data[data.length-1].plantname)
                     <Form.Item label="Sunlight" name="sunlight" required>
                 <Input placeholder="Minimum sunlight exposure hours" maxLength={20} allowClear required></Input>
                     </Form.Item>
-                <Form.Item label="Watering" name="water" required>
+                <Form.Item label="Watering" name="watering" required>
                     <Input placeholder="Times per week this Plant needs water" maxLength={20}allowClear></Input>
                 </Form.Item>
-                <Form.Item label="Price" name="price" required>
+                <Form.Item label="Price in €" name="price" type="number" required>
                 <   Input placeholder="price" allowClear required></Input>
                 </Form.Item>
-                <Form.Item label="PurchaseDate" name="DatePicker" required>
+                <Form.Item label="PurchaseDate" name="purchaseDate" required>
                     <DatePicker required/>
                 </Form.Item>
                 <Form.Item wrapperCol={{ offset: 10, span: 16,}}>
-                    <Button type="primary" htmlType="submit">Submit</Button>
+                    <Button type="primary" htmlType="submit" >Submit</Button>
                 </Form.Item>
         </Form>
 
-</main>
+</>
     )
 }
-
-
-//const onsubmit= (event) => {console.log("submitted")}
-// const data = fs.promises.writeFile(filePath, 'utf8');
-// Parse the JSON data
-// const TableData = JSON.parse(data);
-// Return the parsed data
