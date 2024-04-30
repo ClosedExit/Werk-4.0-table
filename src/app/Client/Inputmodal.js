@@ -2,13 +2,13 @@
 import React from "react";
 import { useState } from "react";
 import {Input, Button, Form, DatePicker, Table, Modal} from "antd";
-import {data, columns} from "../server/plants";
+import {data, columns, getPlants, currPlantsPro} from "../server/plants";
 
 
 export default function tableForm (){       
 
 // renders preexisting list-entries
-const [dummyData, addItem] = useState(data);//dummyData is the new array with data as initialstate and addItem a function for updating
+const [dummyData, addItem] = useState(currPlantsPro);//dummyData is the new array with data as initialstate and addItem a function for updating
 
 // rerenders old list-entries and adds a new list-entrie, but without changing the original data
 // triggert on onFinish/submit

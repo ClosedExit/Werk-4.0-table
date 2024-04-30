@@ -48,6 +48,41 @@ export let columns = [
             key: "key"
         }
     ]
+
+
+export function getPlants(){
+        return data;
+       };
+
+export function getColumns () {
+    return columns;
+}
+
+export const getDataPro = () => {
+    var dataPro = new Promise(function(resolve, reject){
+        if(data.length > 0){resolve(data)}
+        setTimeout(() => reject("Too much data"), 3000);})    
+    .then(data => console.log ("it worked" + data))
+    .catch(error => console.log("The array might be empty"))
+    .finally(() => console.log("Bearbeitung beendet"));
+}
+
+export async function currPlants(){
+// ich muss die get plants datei erstmal als ein promise machen um dann async und await nutzen zu können
+    const existingData = await getPlants();
+    console.log(existingData);
+    return existingData;
+}
+export async function currPlantsPro(){
+    // ich muss die get plants datei erstmal als ein promise machen um dann async und await nutzen zu können
+        const existingData = await getDataPro();
+        console.log(existingData);
+        return existingData;
+    }
+        
+        export async function currColumns(){
+        const existingColumns = await getColumns().map(objekt => col.title);
+        }
  //// attempt to render the upperpart on the serverside while rendering a separate table underneath without titles, to create a illusion of one table, since a serverside table can't be dynamicly 
  /*
     export let columnsNoT = [
